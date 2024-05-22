@@ -1,5 +1,3 @@
-/* eslint-disable prefer-const */
-/* eslint-disable no-prototype-builtins */
 import { type ClassValue, clsx } from "clsx";
 import qs from "qs";
 import { twMerge } from "tailwind-merge";
@@ -48,7 +46,7 @@ const toBase64 = (str: string) =>
     : window.btoa(str);
 
 export const dataUrl = `data:image/svg+xml;base64,${toBase64(
-  shimmer(1000, 1000),
+  shimmer(1000, 1000)
 )}`;
 // ==== End
 
@@ -78,7 +76,7 @@ export function removeKeysFromQuery({
 
   // Remove null or undefined values
   Object.keys(currentUrl).forEach(
-    (key) => currentUrl[key] == null && delete currentUrl[key],
+    (key) => currentUrl[key] == null && delete currentUrl[key]
   );
 
   return `${window.location.pathname}?${qs.stringify(currentUrl)}`;
@@ -94,11 +92,11 @@ export const debounce = (func: (...args: any[]) => void, delay: number) => {
 };
 
 // GE IMAGE SIZE
-type AspectRatioKey = keyof typeof aspectRatioOptions;
+export type AspectRatioKey = keyof typeof aspectRatioOptions;
 export const getImageSize = (
   type: string,
   image: any,
-  dimension: "width" | "height",
+  dimension: "width" | "height"
 ): number => {
   if (type === "fill") {
     return (
@@ -132,10 +130,14 @@ export const download = (url: string, filename: string) => {
 
 // DEEP MERGE OBJECTS
 export const deepMergeObjects = (obj1: any, obj2: any) => {
-  let output = { ...obj1 };
+  if (obj2 === null || obj2 === undefined) {
+    return obj1;
+  }
 
-  for (let key in obj2) {
-    if (obj2.hasOwnProperty(key)) {
+  let output = { ...obj2 };
+
+  for (let key in obj1) {
+    if (obj1.hasOwnProperty(key)) {
       if (
         obj1[key] &&
         typeof obj1[key] === "object" &&
@@ -144,7 +146,7 @@ export const deepMergeObjects = (obj1: any, obj2: any) => {
       ) {
         output[key] = deepMergeObjects(obj1[key], obj2[key]);
       } else {
-        output[key] = obj2[key];
+        output[key] = obj1[key];
       }
     }
   }
